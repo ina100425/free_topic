@@ -3,6 +3,7 @@ import random
 import requests
 import time
 import base64
+import feedparser  # 📰 뉴스 기능을 위해 추가
 from streamlit_lottie import st_lottie
 
 # ==========================================
@@ -27,7 +28,7 @@ JAMPONG_IMAGE_PATH = "jampong.png"
 PATRICK_GIF_PATH = "patrick.gif"
 ROBOT_IMAGE_PATH = "robot.png"
 BODY_FONT_PATH = "kkukkkuk.ttf"
-DAHYUN_FONT_PATH = "dahyun.ttf" # 변환될 폰트 추가
+DAHYUN_FONT_PATH = "dahyun.ttf"
 
 # 데이터 로드
 body_font_base64 = get_local_file_as_base64(BODY_FONT_PATH)
@@ -76,7 +77,6 @@ st.markdown(
         line-height: 1.2;
     }}
 
-    /* 🤖 로봇 옆 다짐 말풍선 스타일 (디자인 복구 및 꼬리 추가) */
     .hand-drawn-goal {{
         font-family: 'kkukkkuk' !important;
         font-weight: normal !important;
@@ -86,13 +86,11 @@ st.markdown(
         padding: 15px 25px; 
         font-size: 1.2rem; 
         color: #4E342E !important;
-        /* 기존 디자인 복구 */
         border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
         box-shadow: 3px 3px 0px #4E342E;
         margin-left: 20px;
     }}
 
-    /* 왼쪽 꼬리 (로봇 방향) */
     .hand-drawn-goal::before {{
         content: '';
         position: absolute;
@@ -156,7 +154,6 @@ st.markdown(
     
     .goal-section {{ display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }}
     
-    /* 🌈 하단 기분 점수용 말풍선 스타일 (디자인 유지) */
     .hand-drawn-bubble {{
         position: relative; padding: 30px; margin-top: 30px; font-size: 1.15rem;
         text-align: center; border: 3px solid; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
@@ -180,6 +177,31 @@ st.markdown(
     .mood-mid::after {{ border-bottom-color: #FFF3E0 !important; }}
     .mood-low {{ background-color: #ECEFF1; color: #4E342E !important; border-color: #CFD8DC; }}
     .mood-low::after {{ border-bottom-color: #ECEFF1 !important; }}
+
+    .news-card {{
+        background-color: #FFFFFF;
+        border: 2px solid #F48FB1;
+        border-radius: 15px;
+        padding: 15px;
+        height: 100%;
+        transition: transform 0.2s;
+        text-decoration: none !important;
+        display: block;
+    }}
+    .news-card:hover {{
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(244, 143, 177, 0.3);
+    }}
+    .news-title {{
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #AD1457 !important;
+    }}
+    .news-source {{
+        font-size: 0.85rem;
+        color: #888 !important;
+    }}
 
     .font-label-large {{
         font-size: 1.3rem !important;
@@ -227,6 +249,13 @@ def get_weather(city_name, api_key):
         return None
     except: return None
 
+# 📰 뉴스 가져오기 함수 (키워드: AI, AX, 인공지능)
+def get_ai_news():
+    # 🌟 키워드 조합 변경: AI OR AX OR 인공지능
+    rss_url = "https://news.google.com/rss/search?q=AI+OR+AX+OR+인공지능&hl=ko&gl=KR&ceid=KR:ko"
+    feed = feedparser.parse(rss_url)
+    return feed.entries[:2]
+
 with st.sidebar:
     st.subheader("📍 오늘의 날씨")
     city = st.selectbox("도시 선택", ["Seoul", "Busan", "Incheon", "Daegu", "Daejeon", "Gwangju", "Jeju"])
@@ -235,8 +264,8 @@ with st.sidebar:
         if weather_data:
             w_code = weather_data['icon'][:2]
             emoji_map = {"01": "☀️", "02": "⛅", "03": "☁️", "04": "☁️", "09": "🌧️", "10": "🌦️", "11": "🌩️", "13": "❄️", "50": "🌫️"}
-            st.markdown(f"<div style='font-size: 60px; text-align: center; padding: 10px;'>{emoji_map.get(w_code, '✨')}</div>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align:center; font-size: 1.2rem;'>현재 날씨: {weather_data['desc']}</p>", unsafe_allow_html=True)
+            st.markdown(f"<div style='font-size: 60px; text-align: center; padding: 10px 10px 0px 10px;'>{emoji_map.get(w_code, '✨')}</div>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align:center; font-size: 1.2rem; margin-top: -10px;'>현재 날씨: {weather_data['desc']}</p>", unsafe_allow_html=True)
             col_w1, col_w2 = st.columns(2)
             col_w1.metric("기온", f"{weather_data['temp']}°C")
             col_w2.metric("습도", f"{weather_data['humidity']}%")
@@ -306,8 +335,25 @@ lottie_json = load_lottieurl(lottie_url)
 if lottie_json: st_lottie(lottie_json, height=250, key="mood_ani")
 st.markdown(f'<div class="hand-drawn-bubble {mood_class}">{status_msg}</div>', unsafe_allow_html=True)
 
+# ---------------------------------------------------------
+# ✨ [신규 추가] 실시간 AI/AX 뉴스 섹션 (키워드 업데이트)
+# ---------------------------------------------------------
 st.markdown("---")
-st.header("✍️ 눈누폰트에서 찾은 귀여운 고양이 폰트... 써보실래요?")
+st.header("📰 실시간 AI 관련 핫이슈")
+news_list = get_ai_news()
+col_n1, col_n2 = st.columns(2)
+
+for i, news in enumerate(news_list):
+    with [col_n1, col_n2][i]:
+        st.markdown(f"""
+            <a href="{news.link}" target="_blank" class="news-card">
+                <div class="news-title">{news.title}</div>
+                <div class="news-source">출처: {news.source.get('title', 'Google News')}</div>
+            </a>
+        """, unsafe_allow_html=True)
+
+st.markdown("---")
+st.header("✍️ 눈누에서 찾은 귀여운 고양이 폰트... 써보실래요?")
 st.markdown('<p class="font-label-large">¢, £, †, ♤ 를 입력하면 귀여운 고양이를 만날 수 있어요! 🐈‍⬛</p>', unsafe_allow_html=True)
 test_text = st.text_input("체험 텍스트 입력", placeholder="여기에 입력해보세요.", key="font_tester", label_visibility="collapsed")
 
