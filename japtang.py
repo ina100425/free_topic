@@ -77,6 +77,7 @@ st.markdown(
         line-height: 1.2;
     }}
 
+    /* 🤖 로봇 옆 다짐 말풍선 스타일 */
     .hand-drawn-goal {{
         font-family: 'kkukkkuk' !important;
         font-weight: normal !important;
@@ -116,6 +117,16 @@ st.markdown(
     .stApp {{ background-color: #FFFDE7; }}
     [data-testid="stSidebar"] {{ background-color: #FFEBEE; }}
     
+    /* ⚪ 입력 박스 설정 */
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="textarea"] > div,
+    div[data-baseweb="input"] > div,
+    input, textarea {{
+        background-color: #FFFFFF !important;
+        border: 1.5px solid #D2B48C !important; /* 얇은 실선 테두리 적용 */
+        border-radius: 8px !important;
+    }}
+
     hr {{
         border: none !important;
         border-top: 3px dashed #F8BBD0 !important; 
@@ -155,7 +166,8 @@ st.markdown(
     .goal-section {{ display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }}
     
     .hand-drawn-bubble {{
-        position: relative; padding: 30px; margin-top: 30px; font-size: 1.15rem;
+        position: relative; padding: 30px; margin-top: 30px; 
+        font-size: 1.35rem !important;
         text-align: center; border: 3px solid; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
         display: block; width: 100%; box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
         font-family: 'kkukkkuk' !important;
@@ -178,38 +190,43 @@ st.markdown(
     .mood-low {{ background-color: #ECEFF1; color: #4E342E !important; border-color: #CFD8DC; }}
     .mood-low::after {{ border-bottom-color: #ECEFF1 !important; }}
 
+    /* ✨ 뉴스 카드 Soft Mint Teal 스타일 */
     .news-card {{
-        background-color: #FFFFFF;
-        border: 2px solid #F48FB1;
+        background-color: #CADEDF !important;
+        border: 2px solid #A8C4C5 !important;
         border-radius: 15px;
         padding: 15px;
         height: 100%;
-        transition: transform 0.2s;
+        transition: transform 0.2s, background-color 0.2s;
         text-decoration: none !important;
         display: block;
     }}
     .news-card:hover {{
         transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(244, 143, 177, 0.3);
+        background-color: #B8D3D4 !important;
+        box-shadow: 0 4px 15px rgba(168, 196, 197, 0.5);
+        border-color: #8EB2B3 !important;
     }}
     .news-title {{
         font-size: 1.1rem;
         font-weight: bold;
         margin-bottom: 8px;
-        color: #AD1457 !important;
+        color: #2D4344 !important;
     }}
     .news-source {{
         font-size: 0.85rem;
-        color: #888 !important;
+        color: #537172 !important;
     }}
 
     .font-label-large {{
         font-size: 1.3rem !important;
         margin-bottom: 10px;
     }}
+    
+    /* 💛 폰트 체험 존 결과창 스타일 수정 */
     .font-test-area-dahyun {{
-        background-color: #FFFFFF;
-        border: 2px solid #F48FB1;
+        background-color: #FFF9C4 !important; 
+        border: 3px dashed #FBC02D !important; /* ✨ 점선 테두리 적용 */
         border-radius: 15px;
         padding: 20px;
         font-size: 2.2rem;
@@ -251,7 +268,6 @@ def get_weather(city_name, api_key):
 
 # 📰 뉴스 가져오기 함수 (키워드: AI, AX, 인공지능)
 def get_ai_news():
-    # 🌟 키워드 조합 변경: AI OR AX OR 인공지능
     rss_url = "https://news.google.com/rss/search?q=AI+OR+AX+OR+인공지능&hl=ko&gl=KR&ceid=KR:ko"
     feed = feedparser.parse(rss_url)
     return feed.entries[:2]
@@ -336,7 +352,7 @@ if lottie_json: st_lottie(lottie_json, height=250, key="mood_ani")
 st.markdown(f'<div class="hand-drawn-bubble {mood_class}">{status_msg}</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# ✨ [신규 추가] 실시간 AI/AX 뉴스 섹션 (키워드 업데이트)
+# ✨ 실시간 AI 관련 뉴스 섹션
 # ---------------------------------------------------------
 st.markdown("---")
 st.header("📰 실시간 AI 관련 핫이슈")
