@@ -315,7 +315,7 @@ patrick_html = f'<img src="data:image/gif;base64,{patrick_data}" style="position
 st.markdown(f'<div style="position: relative;">{patrick_html}', unsafe_allow_html=True)
 st.header("🍴 점심 뭐 먹지?")
 col1, col2 = st.columns(2)
-cheap_menu = ["맥도날드", "치킨랩", "가득드림", "컵라면", "샌드위치", "노브랜드", "쿠차라"]
+cheap_menu = ["맥도날드", "치킨랩", "가득드림", "컵라면", "샌드위치", "노브랜드", "쿠차라", "편의점 김밥"]
 expensive_menu = ["아오내순대국", "북창동순두부", "김치찜", "부대찌개", "라멘", "초밥", "돈까스", "마라탕", "쌀국수"]
 with col1:
     st.subheader("💸 만 원 이하 점메추")
