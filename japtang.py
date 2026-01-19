@@ -340,7 +340,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown("---")
 
 st.header("🤔 현재 기분 점수")
-st.markdown('<p style="font-size: 1.25rem; margin-bottom: -10px;">지금 기분이 어떠신가요?</p>', unsafe_allow_html=True)
+st.markdown('<p style="font-size: 1.25rem; margin-bottom: -15px;">지금 기분이 어떠신가요?</p>', unsafe_allow_html=True)
 score = st.slider("", 0, 100, 50, key="mood_slider", label_visibility="collapsed")
 
 if score >= 80: lottie_url, status_msg, mood_class = "https://assets9.lottiefiles.com/packages/lf20_u4j3tAz98v.json", "최고예요! 이 기세를 몰아 오늘을 즐기세요! 🕺💃", "mood-high"
