@@ -316,7 +316,7 @@ st.markdown(f'<div style="position: relative;">{patrick_html}', unsafe_allow_htm
 st.header("🍴 점심 뭐 먹지?")
 col1, col2 = st.columns(2)
 cheap_menu = ["맥도날드", "치킨랩", "가득드림", "컵라면", "샌드위치", "노브랜드", "쿠차라"]
-expensive_menu = ["아오내순대국", "북창동순두부", "김치찜", "부대찌개", "라멘", "초밥", "돈까스", "마라탕"]
+expensive_menu = ["아오내순대국", "북창동순두부", "김치찜", "부대찌개", "라멘", "초밥", "돈까스", "마라탕", "쌀국수"]
 with col1:
     st.subheader("💸 만 원 이하 점메추")
     p1 = st.empty(); p1.markdown('<div class="menu-box sky-blue-box" style="padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 10px; background-color: #E3F2FD; color: #4E342E !important; border: 2px dashed #BBDEFB; font-size: 1.5rem;">메뉴를 뽑아보세요!</div>', unsafe_allow_html=True)
